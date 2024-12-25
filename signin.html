@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/2048px-Microsoft_logo.svg.png" alt="" class="img-thumbnail mx-auto d-block border-0" width="60" height="60">
+        <h2 class="text-center">Sign in</h2>
+        <p class="text-center">Welcome back! <span class="fw-bold" id="usernamepage"></span></p>
+        <div class="card mx-auto" style="max-width: 400px;">
+            <div class="card-body">
+                <form id="loginForm">
+                    <p style="font-size: 12px;" class="text-center">Dont have an account? <a href="#" class="text-decoration-underline" onclick="signUp()">Sign up</a></p>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nama Pengguna</label>
+                        <input type="text" class="form-control" id="name" placeholder="Masukkan nama pengguna" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="Masukkan password" required>
+                    </div>
+                    <p class="text-danger text-center" style="font-size: 12px;" id="failed"></p>
+                    <p class="">This is just a test, please <span class="text-decoration-underline">don't enter your personal data!</span></p>
+                    <button type="submit" class="btn btn-primary w-100" id="buttonSignin">Sign in</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`); 
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        // Fungsi untuk menyimpan data di cookies
+        function setCookie(name, value, days) {
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};path=/;expires=${d.toUTCString()}`;
+        }
+
+        // Fungsi untuk menangani login
+        document.getElementById("loginForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            
+            const inputName = document.getElementById("name").value;
+            const inputPassword = document.getElementById("password").value;
+
+            // Ambil data dari cookies
+            const storedName = getCookie("userName");
+            const storedPassword = getCookie("userPassword");
+
+            if (inputName === storedName && inputPassword === storedPassword) {
+                setCookie("logout", "false", 7); // Menyimpan status logout sebagai false
+                setCookie("HaveLoggedIn", "true", 7); // Menyimpan status pengguna sudah pernah login sebelumnya
+                window.location.href = "index.html"; // Pindah ke halaman utama
+            } else {
+                document.getElementById("failed").innerText = 'Username atau password salah!';
+                document.getElementById("buttonSignin").style.backgroundColor = 'red';
+                document.getElementById("buttonSignin").style.border = 'none';
+            }
+        });
+
+        function loadUserData() {
+            const userEmail = getCookie("userEmail");
+            const userName = getCookie("userName");
+
+            if (!userEmail || !userName) {
+                window.location.href = "login.html"; // Arahkan ke halaman login
+            } else {
+                // Tampilkan ucapan "Halo, <nama pengguna>"
+                document.getElementById("usernamepage").innerText = `${userEmail}!`;
+            }
+        }
+
+        function signUp() {
+            setCookie("tempered", "true", 7); // Menyimpan status pengguna sudah pernah login sebelumnya
+            setCookie("logout", "true", 7); // Menyimpan status logout sebagai false
+            setCookie("HaveLoggedIn", "false", 7); // Menyimpan status pengguna sudah pernah login sebelumnya
+            window.location.href = "login.html"; // Pindah ke halaman utama
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            loadUserData();
+        });
+    </script>
+</body>
+</html>
