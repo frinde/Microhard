@@ -3,21 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Sign Up</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container mt-5">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/2048px-Microsoft_logo.svg.png" alt="" class="img-thumbnail mx-auto d-block border-0" width="60" height="60">
-        <h2 class="text-center">Sign in</h2>
+        <h2 class="text-center" id="titling">Sign Up</h2>
         <p class="text-center">To continue to <span class="fw-bold">MicroHard</span></p>
         <div class="card mx-auto" style="max-width: 400px;">
             <div class="card-body">
                 <form id="loginForm">
+                    <p style="font-size: 12px;" id="temperText" class="text-center">I have an account! <a href="#" class="text-decoration-underline" onclick="signIn()">Sign in</a></p>
                     <div class="mb-3">
                         <label for="name" class="form-label">Nama Pengguna</label>
-                        <input type="text" class="form-control" id="name" placeholder="Masukkan nama pengguna" required>
+                        <input type="text" class="form-control mb-1" id="name" placeholder="Masukkan nama pengguna" required>
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="col-3">
+                            <!-- Dropdown Tanggal -->
+                            <select class="form-control mb-1" id="day" required>
+                                <option value="">tanggal</option>
+                                <!-- Loop for days from 1 to 31 -->
+                                <script>
+                                    for (let i = 1; i <= 31; i++) {
+                                        let day = i < 10 ? "0" + i : i; // Add leading zero for single digit
+                                        let option = document.createElement("option");
+                                        option.value = day;
+                                        option.innerText = day;
+                                        document.getElementById("day").appendChild(option);
+                                    }
+                                </script>
+                            </select>
+                        </div>
+                        <div class="col-5">
+                            <!-- Dropdown Bulan -->
+                            <select class="form-control mb-1" id="month" required>
+                                <option value="01">Januari</option>
+                                <option value="02">Februari</option>
+                                <option value="03">Maret</option>
+                                <option value="04">April</option>
+                                <option value="05">Mei</option>
+                                <option value="06">Juni</option>
+                                <option value="07">Juli</option>
+                                <option value="08">Agustus</option>
+                                <option value="09">September</option>
+                                <option value="10">Oktober</option>
+                                <option value="11">November</option>
+                                <option value="12">Desember</option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <input type="text" class="form-control mb-1" id="year" maxlength="4" placeholder="tahun" required>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
@@ -27,47 +66,87 @@
                         <label for="password" class="form-label">Password</label>
                         <input type="password" class="form-control" id="password" placeholder="Masukkan password" required>
                     </div>
+                    <p class="text-danger text-center" style="font-size: 12px;" id="fail"></p>
                     <p class="">This is just a test, please <span class="text-decoration-underline">don't enter your personal data!</span></p>
-                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                    <button type="submit" class="btn btn-primary w-100" id="buttonSignup">Sign up</button>
                 </form>
             </div>
-        </div>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Fungsi untuk menyimpan data di cookies
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
         function setCookie(name, value, days) {
             const d = new Date();
             d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
             document.cookie = `${name}=${value};path=/;expires=${d.toUTCString()}`;
         }
 
-        // Fungsi untuk menangani login
         document.getElementById("loginForm").addEventListener("submit", function (event) {
             event.preventDefault();
-            const userName = document.getElementById("name").value;
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
+            const currentdate = new Date().getFullYear();
+            const userName = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const years = document.getElementById("year").value.trim();
+            const age = currentdate - years;
 
-            if (userName && email && password) {
-                // Dapatkan tanggal saat ini
-                const today = new Date();
-                const joinDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
-
-                // Simpan data di cookies
-                setCookie("userName", userName, 7);
-                setCookie("userEmail", email, 7);
-                setCookie("userPassword", password, 7); // Menyimpan password di cookies
-                setCookie("joinDate", joinDate, 7); // Menyimpan tanggal bergabung
-                setCookie("logout", "false", 7); // Menyimpan status logout sebagai false
-
-                alert("Login berhasil!");
-                window.location.href = "index.html"; // Pindah ke halaman utama
-            } else {
-                alert("Semua kolom wajib diisi.");
+            const existingEmail = getCookie("userEmail");
+            if (email === existingEmail) {
+                document.getElementById("fail").innerText = "Email sudah digunakan";
+                document.getElementById("buttonSignup").style.backgroundColor = 'red';
+                document.getElementById("buttonSignup").style.border = 'none';
+                return;
             }
+
+            const today = new Date();
+            const joinDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+
+            setCookie("userName", userName, 7);
+            setCookie("userEmail", email, 7);
+            setCookie("userPassword", password, 7);
+            setCookie("age", age, 7);
+            setCookie("joinDate", joinDate, 7);
+            setCookie("logout", "false", 7);
+            setCookie("HaveLoggedIn", "true", 7);
+
+            alert("Pendaftaran berhasil!");
+            window.location.href = "index.html";
+        });
+
+        function checkIsLoggedIn() {
+            const HaveLoggedIn = getCookie("HaveLoggedIn");
+            if (HaveLoggedIn === "true") {
+                window.location.href = "signin.html";
+            }
+        }
+
+        function istempered() {
+            const tempered = getCookie("tempered");
+            if (tempered === "true") {
+                document.getElementById("temperText").innerHTML = 'I have an account! <a href="#" class="text-decoration-underline" onclick="signIn()">Sign in</a>';
+            } else {
+                document.getElementById("temperText").innerHTML = ' ';
+                document.getElementById("titling").innerText = 'Log in';
+            }
+        }
+
+        function signIn() {
+            setCookie("tempered", "false", 7);
+            setCookie("logout", "false", 7);
+            setCookie("HaveLoggedIn", "true", 7);
+            window.location.href = "signin.html";
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            checkIsLoggedIn();
+            istempered();
         });
     </script>
 </body>
