@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Pengguna</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-md bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/2048px-Microsoft_logo.svg.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Profil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="data-pegawai.html">Data Pegawai</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active disabled" href="#">Akun</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section style="height: fit-content; min-height: 100vh;">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col">
+                    <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Akun</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card border-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Nama Lengkap :</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="nameDetail">John Doe</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Email :</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="emailDetail">example@example.com</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Password :</p>
+                                </div>
+                                <div class="col-sm-7">
+                                    <p class="text-muted mb-0" id="password">******</p>
+                                </div>
+                                <div class="col-sm-2 text-end">
+                                    <button id="togglePassword" class="btn btn-outline-secondary btn-sm">Tampilkan</button>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Tanggal Bergabung :</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0" id="joinDateDetail">Tidak ditemukan</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="row-sm-3">
+                                    <button id="authButton" class="btn btn-warning"><i class="fa-solid fa-right-to-bracket"></i> Logout</button>
+                                    <button id="deleteAccount" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Delete account</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container-fluid py-4 border-top bg-light">
+        <p class="text-muted">© 2024, Iqbal Ramadhan</p>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://kit.fontawesome.com/e1288edb06.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Fungsi untuk mendapatkan cookies
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        // Fungsi untuk memuat profil pengguna dari cookies
+        function loadUserProfile() {
+            const userName = getCookie("userName");
+            const userEmail = getCookie("userEmail");
+            const userPassword = getCookie("userPassword");
+            const userJoinDate = getCookie("joinDate"); // Ambil tanggal bergabung
+            const logoutStatus = getCookie("logout");
+
+            if (logoutStatus === "true" || !userName || !userEmail) {
+                window.location.href = "login.html"; // Redirect ke halaman login jika tidak login
+            }
+
+            document.getElementById("nameDetail").textContent = userName || "Tidak ditemukan";
+            document.getElementById("emailDetail").textContent = userEmail || "Tidak ditemukan";
+            document.getElementById("password").textContent = userPassword ? "******" : "Tidak ditemukan";
+            document.getElementById("joinDateDetail").textContent = userJoinDate || "Tidak ditemukan"; // Tampilkan tanggal bergabung
+        }
+
+        // Fungsi untuk mengubah visibilitas password
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            const passwordElement = document.getElementById("password");
+            if (passwordElement.textContent === "******") {
+                const userPassword = getCookie("userPassword");
+                passwordElement.textContent = userPassword || "Tidak ditemukan";
+                this.textContent = "Sembunyikan";
+            } else {
+                passwordElement.textContent = "******";
+                this.textContent = "Tampilkan";
+            }
+        });
+
+        // Muat profil pengguna saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", loadUserProfile);
+
+        // Fungsi untuk logout
+        function logout() {
+            document.cookie = "userName=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "userEmail=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "userPassword=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "logout=true; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; // Set logout status to true
+            alert("Logout berhasil!");
+            window.location.href = "login.html"; // Redirect ke halaman login
+        }
+
+        // Event listener untuk tombol logout
+        document.getElementById("authButton").addEventListener("click", logout);
+
+        function deleteAccount() {
+            if (confirm("Apakah anda yakin?")) {
+                document.cookie = "userName=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                document.cookie = "userEmail=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                document.cookie = "userPassword=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                alert("Akun anda telah dihapus.");
+                window.location.href = "login.html"; // Redirect ke halaman login setelah akun dihapus
+            }
+        }
+
+        // Menambahkan event listener untuk tombol delete account
+        document.getElementById("deleteAccount").addEventListener("click", deleteAccount);
+
+    </script>
+</body>
+</html>

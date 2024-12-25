@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/2048px-Microsoft_logo.svg.png" alt="" class="img-thumbnail mx-auto d-block border-0" width="60" height="60">
+        <h2 class="text-center">Sign in</h2>
+        <p class="text-center">To continue to <span class="fw-bold">MicroHard</span></p>
+        <div class="card mx-auto" style="max-width: 400px;">
+            <div class="card-body">
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nama Pengguna</label>
+                        <input type="text" class="form-control" id="name" placeholder="Masukkan nama pengguna" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="Masukkan email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="Masukkan password" required>
+                    </div>
+                    <p class="">This is just a test, please <span class="text-decoration-underline">don't enter your personal data!</span></p>
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Fungsi untuk menyimpan data di cookies
+        function setCookie(name, value, days) {
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};path=/;expires=${d.toUTCString()}`;
+        }
+
+        // Fungsi untuk menangani login
+        document.getElementById("loginForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const userName = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            if (userName && email && password) {
+                // Dapatkan tanggal saat ini
+                const today = new Date();
+                const joinDate = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+
+                // Simpan data di cookies
+                setCookie("userName", userName, 7);
+                setCookie("userEmail", email, 7);
+                setCookie("userPassword", password, 7); // Menyimpan password di cookies
+                setCookie("joinDate", joinDate, 7); // Menyimpan tanggal bergabung
+                setCookie("logout", "false", 7); // Menyimpan status logout sebagai false
+
+                alert("Login berhasil!");
+                window.location.href = "index.html"; // Pindah ke halaman utama
+            } else {
+                alert("Semua kolom wajib diisi.");
+            }
+        });
+    </script>
+</body>
+</html>
