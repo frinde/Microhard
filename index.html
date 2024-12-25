@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Database dengan Cookies</title>
+    <title>Beranda</title>
     <!-- Link Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-md bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="index.html">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/2048px-Microsoft_logo.svg.png" width="30" height="30" class="d-inline-block align-top" alt="">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,19 +31,23 @@
                         <a class="nav-link" href="account.html">Akun</a>
                     </li>
                 </ul>
-                <button id="authButton" class="btn btn-secondary"><i class="fa-solid fa-right-to-bracket"></i> Logout</button>
+                <button id="authButton" class="btn" style="background-color: #bababaa4;"><i class="fa-solid fa-right-to-bracket"></i> Logout</button>
             </div>
         </div>
     </nav>
     
-    <div class="container mt-4 " style="height: fit-content; min-height: 100vh;">
+    <div class="container mt-4 " style="height: fit-content; min-height: 40vh;">
         <div id="greeting" class="display-4"></div>
-        <p class="lead">Ini adalah contoh website simple dengan menggunakan cookies sebagai database. Perlu diingat bahwa jangan memasukkan data sensitif ke dalam cookies karena rentan terhadap serangan peretas.</p>
+        <p class="lead">Ini adalah contoh simpel website menggunakan cookies sebagai database.Jangan pernah memasukkan data sensitif ke dalam cookies, karena cookie rentan terhadap serangan peretas.</p>
         <hr class="my-4">
-        <p>Web ini dibuat oleh <a href="https://github.com/frinde">Iqbal Ramadhan</a></p>
+        <p>Situs ini dibuat oleh <a href="https://github.com/frinde">Iqbal Ramadhan</a></p>
         <p class="lead">
-            <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+            <a class="btn" href="#learn" role="button" style="background-color: #edededa4;">Learn more</a>
         </p>
+    </div>
+
+    <hr>
+    <div class="container-fluid" id="learn" style="height: fit-content; min-height: 50vh; background-color: #305681a4;">
     </div>
 
     <div class="container-fluid py-4 border-top bg-light">
@@ -70,24 +74,27 @@
 
         // Fungsi untuk memuat data pengguna dari cookies
         function loadUserData() {
+            const logoutStatus = getCookie("logout");
             const userEmail = getCookie("userEmail");
             const userName = getCookie("userName");
 
-            if (!userEmail || !userName) {
-                window.location.href = "login.html"; // Arahkan ke halaman login
+            if (logoutStatus === "true" || !userEmail || !userName) {
+                window.location.href = "login.html";
             } else {
-                // Tampilkan ucapan "Halo, <nama pengguna>"
                 document.getElementById("greeting").innerText = `Halo, ${userName}!`;
             }
         }
 
         // Fungsi untuk logout dan menambahkan cookie logout=true
         function logout() {
-            // Tambahkan cookie logout=true
-            document.cookie = "logout=true; path=/;";
+            if(confirm("anda akan logout")) {
+                // Tambahkan cookie logout=true
+                document.cookie = "logout=true; path=/;";
 
-            alert("Anda telah logout!");
-            window.location.href = "login.html"; // Arahkan ke halaman login
+
+                alert("Anda telah logout!");
+                window.location.href = "login.html"; // Arahkan ke halaman login
+            }
         }
 
         // Event listener untuk tombol login/logout
