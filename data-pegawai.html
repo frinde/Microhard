@@ -8,9 +8,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 </head>
 <body>
+    <!-- Navbar -->
     <nav class="navbar navbar-expand-md bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="index.html">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/2048px-Microsoft_logo.svg.png" width="30" height="30" class="d-inline-block align-top" alt="">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,28 +36,57 @@
             </div>
         </div>
     </nav>
-    
-    <div class="container mt-4" style="height: fit-content; min-height: 100vh;">
-        <h2 class="text-center">Data Pegawai</h2>
-        <div id="greeting" class="text-center my-3"></div> <!-- Ucapan untuk Nama Pengguna -->
-        <table class="table table-bordered table-striped" id="employeeTable">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Data akan ditambahkan di sini -->
-            </tbody>
-        </table>
-    </div>
 
+    <section style="height: fit-content; min-height: 100vh;">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col">
+                    <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Data</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+    <!-- Section untuk Data Pegawai -->
+    <section class="intro">
+            <div class="d-flex  py-4" style="height: fit-content; min-height: 100vh;">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-borderless text-white mb-0" id="employeeTable">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Nama</th>
+                                                    <th scope="col">Position</th>
+                                                    <th scope="col">Contact</th>
+                                                    <th scope="col">Age</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Data Pegawai akan ditambahkan di sini -->
+                                            </tbody>
+                                            <tbody><tr><td>John doe</td><td>Programmer</td><td>johndoe123@gmail.com</td><td>24</td></tr></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <!-- Footer -->
     <div class="container-fluid py-4 border-top bg-light">
         <p class="text-muted">© 2024, Iqbal Ramadhan</p>
     </div>
 
-    <!-- Bootstrap JS -->
+    <!-- Bootstrap JS & Font Awesome -->
     <script src="https://kit.fontawesome.com/e1288edb06.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -78,17 +108,16 @@
         function loadTableData() {
             const tableBody = document.querySelector("#employeeTable tbody");
             const userEmail = getCookie("userEmail");
-            const userName = getCookie("userName"); // Ambil nama pengguna dari cookie
+            const userName = getCookie("userName");
             const logoutStatus = getCookie("logout");
+            const age = getCookie("age");
+            const userJoinDate = getCookie("joinDate");
 
             if (logoutStatus === "true" || !userEmail || !userName) {
                 window.location.href = "login.html"; // Arahkan ke halaman login jika logout atau tidak ada cookie
             } else {
-                // Tampilkan ucapan "Halo, <nama pengguna>"
-                document.getElementById("greeting").innerText = `Halo, ${userName}!`;
-
-                // Tampilkan email pengguna di tabel
-                tableBody.innerHTML = `<tr><td>1</td><td>${userEmail}</td></tr>`;
+                // Tampilkan data pegawai di tabel
+                tableBody.innerHTML = `<tr><td>${userName}</td><td>Manajer</td><td>${userEmail}</td><td>${age}</td></tr>`;
             }
         }
 
@@ -99,14 +128,11 @@
 
             if (userEmail) {
                 // Logout
-                if (confirm("Apakah Anda yakin ingin logout?")) {
-                    clearCookies();
-                    alert("Logout berhasil!");
+                if(confirm("Anda akan logout?")) {
+                    document.cookie = "logout=true; path=/;";
+                    alert("Anda telah logout!");
                     window.location.href = "login.html"; // Arahkan ke halaman login
                 }
-            } else {
-                // Login
-                window.location.href = "login.html";
             }
         });
 
